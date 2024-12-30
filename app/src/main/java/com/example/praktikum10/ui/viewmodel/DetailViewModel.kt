@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
 import com.example.praktikum10.model.Mahasiswa
 import com.example.praktikum10.repository.MahasiswaRepository
+import com.example.praktikum10.ui.view.DestinasiDetail
 import kotlinx.coroutines.launch
 import okio.IOException
 
@@ -36,7 +37,7 @@ class DetailViewModel(
         viewModelScope.launch {
             mahasiswaDetailState = DetailUiState.Loading
             mahasiswaDetailState = try {
-                val mahasiswa = mhs.getMahasiswabyNim(_nim)
+                val mahasiswa = mhs.getMahasiswaByNim(_nim)
                 DetailUiState.Success(mahasiswa)
             } catch (e: IOException) {
                 DetailUiState.Error
