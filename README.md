@@ -1,0 +1,6 @@
+![home mahasiswa](https://github.com/user-attachments/assets/94fe0f05-e070-4d19-8d51-e5b4c69f9294)
+![insert mahasiswa](https://github.com/user-attachments/assets/3885caf3-60b3-4979-b2fc-b44d047915bb)
+![detail mahasiswa](https://github.com/user-attachments/assets/3c179176-5b52-4eed-bd32-9ea2c32ed611)
+![update mahasiswa](https://github.com/user-attachments/assets/8de7065d-cad3-4d37-893e-aeeed689c460)
+![delete mahasiswa](https://github.com/user-attachments/assets/4ec028b5-2fb5-4b4b-9cc9-002ab47297d8)
+![setelah delete](https://github.com/user-attachments/assets/74e08148-dc46-4582-a84a-b7a3c5d00675)
