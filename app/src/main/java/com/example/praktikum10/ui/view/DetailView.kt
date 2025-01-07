@@ -47,7 +47,7 @@ import com.example.praktikum10.ui.viewmodel.PenyediaViewModel
 
 object DestinasiDetail: DestinasiNavigasi {
     override val route = "detail"
-    override val titleRes = "Detail Mhs"
+    override val titleRes = "Detail Mahasiswa"
     const val NIM = "nim"
     val routeWithArgs = "$route/{$NIM}"
 }
@@ -220,7 +220,7 @@ fun DetailView(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiEntry.titleRes,
+                title = DestinasiDetail.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack

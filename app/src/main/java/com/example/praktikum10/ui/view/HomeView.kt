@@ -48,7 +48,7 @@ import com.example.praktikum10.ui.viewmodel.PenyediaViewModel
 
 object DestinasiHome : DestinasiNavigasi {
     override val route = "home"
-    override val titleRes = "Home Mhs"
+    override val titleRes = "Home Mahasiswa"
 }
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)

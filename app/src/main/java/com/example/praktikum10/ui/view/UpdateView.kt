@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 
 object DestinasiUpdate: DestinasiNavigasi {
     override val route = "update"
-    override val titleRes = "Update Mhs"
+    override val titleRes = "Update Mahasiswa"
     const val NIM = "nim"
     val routeWithArgs = "$route/{$NIM}"
 }
