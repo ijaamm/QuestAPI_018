@@ -20,12 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.praktikum10.navigation.DestinasiNavigasi
+import com.example.praktikum10.ui.navigation.DestinasiNavigasi
 import com.example.praktikum10.ui.customwidget.CostumeTopAppBar
-import com.example.praktikum10.viewmodel.InsertUiEvent
-import com.example.praktikum10.viewmodel.InsertUiState
-import com.example.praktikum10.viewmodel.InsertViewModel
-import com.example.praktikum10.viewmodel.PenyediaViewModel
+import com.example.praktikum10.ui.viewmodel.InsertUiEvent
+import com.example.praktikum10.ui.viewmodel.InsertUiState
+import com.example.praktikum10.ui.viewmodel.InsertViewModel
+import com.example.praktikum10.ui.viewmodel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
 object DestinasiEntry: DestinasiNavigasi {

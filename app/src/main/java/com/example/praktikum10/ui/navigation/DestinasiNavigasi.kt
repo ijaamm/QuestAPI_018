@@ -1,4 +1,4 @@
-package com.example.praktikum10.navigation
+package com.example.praktikum10.ui.navigation
 
 interface DestinasiNavigasi {
 

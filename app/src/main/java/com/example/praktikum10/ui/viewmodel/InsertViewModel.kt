@@ -1,4 +1,4 @@
-package com.example.praktikum10.viewmodel
+package com.example.praktikum10.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +14,7 @@ class InsertViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
         private set
 
     fun updateInsertMhsState(insertUiEvent: InsertUiEvent){
-        uiState = InsertUiState(insertUiEvent = InsertUiEvent())
+        uiState = InsertUiState(insertUiEvent = insertUiEvent)
     }
 
     suspend fun insertMhs(){

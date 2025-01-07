@@ -1,4 +1,4 @@
-package com.example.praktikum10.viewmodel
+package com.example.praktikum10.ui.viewmodel
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,11 +9,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import com.example.praktikum10.navigation.PengelolaHalaman
+import com.example.praktikum10.ui.navigation.PengelolaHalaman
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MahasiswaApp(){
+fun MahasiswaApp(
+    modifier: Modifier = Modifier
+){
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

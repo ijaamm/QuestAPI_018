@@ -1,4 +1,4 @@
-package com.example.praktikum10.mahasiswaapplications
+package com.example.praktikum10
 
 import android.app.Application
 import com.example.praktikum10.mahasiswacontainer.AppContainer

@@ -1,25 +1,27 @@
 package com.example.praktikum10.repository
 
 import com.example.praktikum10.Service.MahasiswaService
+import com.example.praktikum10.model.AllMahasiswaResponse
 import com.example.praktikum10.model.Mahasiswa
-import java.io.IOException
+import okio.IOException
+
 
 interface MahasiswaRepository {
-
     suspend fun insertMahasiswa(mahasiswa: Mahasiswa)
 
-    suspend fun getMahasiswa(): List<Mahasiswa>
+    suspend fun getMahasiswa(): AllMahasiswaResponse
 
     suspend fun updateMahasiswa(nim: String, mahasiswa: Mahasiswa)
 
     suspend fun deleteMahasiswa(nim: String)
 
-    suspend fun getMahasiswabyNim(nim: String): Mahasiswa
+    suspend fun getMahasiswaByNim(nim: String): Mahasiswa
 }
 
 class NetworkKontakRepository(
     private val kontakApiService: MahasiswaService
-): MahasiswaRepository{
+) : MahasiswaRepository {
+
     override suspend fun insertMahasiswa(mahasiswa: Mahasiswa) {
         kontakApiService.insertMahasiswa(mahasiswa)
     }
@@ -28,17 +30,26 @@ class NetworkKontakRepository(
         kontakApiService.updateMahasiswa(nim, mahasiswa)
     }
 
+    override suspend fun getMahasiswa(): AllMahasiswaResponse {
+        return kontakApiService.getAllMahasiswa()
+    }
+
     override suspend fun deleteMahasiswa(nim: String) {
-        try{
-            val response = kontakApiService.deleteMahasiswa(nim)
-            if (!response.isSuccessful){
+        try {
+            val reponse = kontakApiService.deleteMahasiswa(nim)
+            if (!reponse.isSuccessful) {
                 throw IOException("Failed to delete kontak. HTTP Status code: " +
-                        "${response.code()}")
-            } else{
-                response.message()
-                println(response.message())
+                        "${reponse.code()}")
+            } else {
+                reponse.message()
+                println(reponse.message())
             }
-        }catch (e : Exception){
+        } catch (e: Exception) {
             throw e
         }
     }
+
+    override suspend fun getMahasiswaByNim(nim: String): Mahasiswa {
+        return kontakApiService.getMahasiswaByNim(nim).data
+    }
+}

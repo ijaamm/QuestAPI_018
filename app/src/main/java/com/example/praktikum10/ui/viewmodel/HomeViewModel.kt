@@ -1,13 +1,12 @@
-package com.example.praktikum10.viewmodel
+package com.example.praktikum10.ui.viewmodel
 
-import android.net.http.HttpException
-import android.os.Build
-import androidx.annotation.RequiresExtension
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.network.HttpException
 import com.example.praktikum10.model.Mahasiswa
 import com.example.praktikum10.repository.MahasiswaRepository
 import kotlinx.coroutines.launch
@@ -27,18 +26,23 @@ class HomeViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
         getMhs()
     }
 
-    fun getMhs(){
+    fun getMhs() {
         viewModelScope.launch {
             mhsUiState = HomeUiState.Loading
             mhsUiState = try {
-                HomeUiState.Success(mhs.getMahasiswa())
-            } catch (e: IOException){
+                HomeUiState.Success(mhs.getMahasiswa().data)
+            } catch (e: IOException) {
+                // Log error untuk IOException
+                Log.e("GetMhsError", "IOException occurred: ${e.message}", e)
                 HomeUiState.Error
-            } catch (e: HttpException){
+            } catch (e: HttpException) {
+                // Log error untuk HttpException
+                Log.e("GetMhsError", "HttpException occurred: ${e.message}", e)
                 HomeUiState.Error
             }
         }
     }
+
 
     fun deleteMhs(nim: String){
         viewModelScope.launch {

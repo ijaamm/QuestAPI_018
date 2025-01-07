@@ -1,5 +1,7 @@
 package com.example.praktikum10.ui.view
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +33,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,23 +40,24 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.praktikum10.R
 import com.example.praktikum10.model.Mahasiswa
-import com.example.praktikum10.navigation.DestinasiNavigasi
+import com.example.praktikum10.ui.navigation.DestinasiNavigasi
 import com.example.praktikum10.ui.customwidget.CostumeTopAppBar
-import com.example.praktikum10.viewmodel.HomeUiState
-import com.example.praktikum10.viewmodel.HomeViewModel
-import com.example.praktikum10.viewmodel.PenyediaViewModel
+import com.example.praktikum10.ui.viewmodel.HomeUiState
+import com.example.praktikum10.ui.viewmodel.HomeViewModel
+import com.example.praktikum10.ui.viewmodel.PenyediaViewModel
 
-object DestinasiHome: DestinasiNavigasi {
+object DestinasiHome : DestinasiNavigasi {
     override val route = "home"
     override val titleRes = "Home Mhs"
 }
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navigateToItemEntry: () -> Unit,
+    navigateToitemEntry: () -> Unit,
     modifier: Modifier = Modifier,
-    onDetailClick:(String) -> Unit = {},
+    onDetailClick: (String) -> Unit = {},
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ){
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -73,20 +75,17 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navigateToItemEntry,
+                onClick = navigateToitemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(18.dp)
             ){
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Kontak"
-                )
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Kontak")
             }
         },
-    ){innerPadding ->
+    ){ innerPadding ->
         HomeStatus(
             homeUiState = viewModel.mhsUiState,
-            retryAction = {viewModel.getMhs()},
+            retryAction = { viewModel.getMhs() },
             modifier = Modifier.padding(innerPadding),
             onDetailClick = onDetailClick, onDeleteClick = {
                 viewModel.deleteMhs(it.nim)
@@ -101,21 +100,21 @@ fun HomeStatus(
     homeUiState: HomeUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
+    onDetailClick: (String) -> Unit,
     onDeleteClick: (Mahasiswa) -> Unit = {},
-    onDetailClick: (String) -> Unit
 ){
-    when(homeUiState) {
-        is HomeUiState.Loading -> OnLoading(modifier = Modifier.fillMaxSize())
+    when (homeUiState) {
+        is HomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
 
         is HomeUiState.Success ->
             if (homeUiState.mahasiswa.isEmpty()) {
                 return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak Ada Data Kontak")
+                    Text(text = "Tidak ada data Kontak")
                 }
             } else {
                 MhsLayout(
                     mahasiswa = homeUiState.mahasiswa,
-                    modifier = modifier.fillMaxSize(),
+                    modifier = modifier.fillMaxWidth(),
                     onDetailClick = {
                         onDetailClick(it.nim)
                     },
@@ -129,27 +128,36 @@ fun HomeStatus(
 }
 
 @Composable
-fun OnLoading(modifier: Modifier = Modifier){
+fun OnLoading(modifier: Modifier = Modifier) {
     Image(
         modifier = modifier.size(200.dp),
-        painter = painterResource(id = R.drawable.loading_img),
+        painter = painterResource(R.drawable.loading),
         contentDescription = stringResource(R.string.loading)
     )
 }
 
 @Composable
-fun OnError(retryAction: () -> Unit,modifier: Modifier = Modifier){
+fun OnError(
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_connection_error),contentDescription = ""
+            painter = painterResource(id = R.drawable.error),
+            contentDescription = ""
         )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-        Button(onClick = retryAction){
-            Text(text = stringResource(R.string.retry))
+        Text(
+            text = stringResource(R.string.loading_failed),
+            modifier = Modifier.padding(16.dp)
+        )
+        Button(
+            onClick = retryAction
+        ) {
+            Text(stringResource(R.string.retry))
         }
     }
 }
@@ -160,18 +168,18 @@ fun MhsLayout(
     modifier: Modifier = Modifier,
     onDetailClick: (Mahasiswa) -> Unit,
     onDeleteClick: (Mahasiswa) -> Unit = {}
-){
+) {
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
-    ){
-        items(mahasiswa){kontak ->
+    ) {
+        items(mahasiswa) { kontak ->
             MhsCard(
                 mahasiswa = kontak,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {onDetailClick(kontak)},
+                    .clickable { onDetailClick(kontak) },
                 onDeleteClick = {
                     onDeleteClick(kontak)
                 }
@@ -182,11 +190,11 @@ fun MhsLayout(
 
 @Composable
 fun MhsCard(
-    mahasiswa : Mahasiswa,
+    mahasiswa: Mahasiswa,
     modifier: Modifier = Modifier,
-    onDeleteClick: (Mahasiswa) -> Unit
-){
-    Card(
+    onDeleteClick: (Mahasiswa) -> Unit = {}
+) {
+    Card (
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -194,20 +202,21 @@ fun MhsCard(
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
-        ){
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Text(
                     text = mahasiswa.nama,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleLarge
                 )
-                Spacer(Modifier.weight(1f))
-                IconButton(onClick = { onDeleteClick(mahasiswa) }) {
+                Spacer(modifier = Modifier.weight(1f))
+                IconButton(
+                    onClick = { onDeleteClick(mahasiswa) }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = null,
+                        contentDescription = null
                     )
                 }
                 Text(

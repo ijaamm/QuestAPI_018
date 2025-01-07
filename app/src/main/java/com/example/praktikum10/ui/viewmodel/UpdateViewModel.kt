@@ -1,42 +1,86 @@
 package com.example.praktikum10.ui.viewmodel
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.network.HttpException
+import com.example.praktikum10.model.Mahasiswa
 import com.example.praktikum10.repository.MahasiswaRepository
-import com.example.praktikum10.ui.view.DestinasiUpdate
 import kotlinx.coroutines.launch
+import okio.IOException
 
-class UpdateViewModel (
-    savedStateHandle: SavedStateHandle,
-    private val mhs: MahasiswaRepository
-): ViewModel(){
-    var updateUiState by mutableStateOf(InsertUiState())
+class UpdateViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
+    var UpdateuiState by mutableStateOf(UpdateUiState())
         private set
 
-    private val _nim: String = checkNotNull(savedStateHandle[DestinasiUpdate.NIM])
+    fun updateState(updateUiEvent: UpdateUiEvent) {
+        UpdateuiState = UpdateUiState(updateUiEvent = updateUiEvent)
+    }
 
-    init {
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    fun loadMahasiswa(nim: String) {
         viewModelScope.launch {
-            updateUiState = mhs.getMahasiswaByNim(_nim)
-                .toUiStateMhs()
+            try {
+                val mahasiswa = mhs.getMahasiswaByNim(nim)
+                UpdateuiState = mahasiswa.toUpdateUiState()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: HttpException) {
+                e.printStackTrace()
+            }
         }
     }
 
-    fun updateInsertMhsState(insertUiEvent: InsertUiEvent){
-        updateUiState = InsertUiState(insertUiEvent = insertUiEvent)
-    }
-
-    suspend fun updateMhs(){
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    fun updateMhs() {
         viewModelScope.launch {
             try {
-                mhs.updateMahasiswa(_nim, updateUiState.insertUiEvent.toMhs())
-            }catch (e: Exception){
+                val mahasiswa = UpdateuiState.updateUiEvent.toMhs()
+                mhs.updateMahasiswa(mahasiswa.nim, mahasiswa)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: HttpException) {
                 e.printStackTrace()
             }
         }
     }
 }
+
+data class UpdateUiState(
+    val updateUiEvent: UpdateUiEvent = UpdateUiEvent()
+)
+
+data class UpdateUiEvent(
+    val nim: String = "",
+    val nama: String = "",
+    val alamat: String = "",
+    val jenisKelamin: String = "",
+    val kelas: String = "",
+    val angkatan: String = ""
+)
+
+fun UpdateUiEvent.toMhs(): Mahasiswa = Mahasiswa(
+    nim = nim,
+    nama = nama,
+    alamat = alamat,
+    jenisKelamin = jenisKelamin,
+    kelas = kelas,
+    angkatan = angkatan
+)
+
+fun Mahasiswa.toUpdateUiState(): UpdateUiState = UpdateUiState(
+    updateUiEvent = toUpdateUiEvent()
+)
+
+fun Mahasiswa.toUpdateUiEvent(): UpdateUiEvent = UpdateUiEvent(
+    nim = nim,
+    nama = nama,
+    alamat = alamat,
+    jenisKelamin = jenisKelamin,
+    kelas = kelas,
+    angkatan = angkatan
+)
